@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>   
+</body>
+<script src="http://unpkg.com/react@17.0.2/umd/react.development.js">
+</script>
+<script src="http://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type = "text/babel">
+    function MinutesToHours () {
+        const [amount, setAmount] = React.useState(0)
+        const [inverted, setInverted] = React.useState(false);
+        const onChange = (event) => {
+            setAmount(event.target.value);
+        };
+        const reset = () => setAmount(0);
+        const onInvert = () => {
+            reset();
+            setInverted(current => !current);
+        };
+        return (
+            <div>
+            <h1>Super converter</h1>
+            <div>
+                <label htmlFor="minutes">Minutes</label>
+                <input 
+                    value={inverted ? amount*60 : amount} 
+                    //flipped상태라면 시에서 분으로 변환 / flipped상태가 아니라면 분입력값 그대로 보여줌
+                    id="minutes" 
+                    placeholder="Minutes" 
+                    type="number" 
+                    onChange={onChange}
+                    disabled={inverted}
+                />
+            </div>
+
+            <div>
+                <label htmlFor="hours">Hours</label>
+                <input 
+                    value={inverted ? amount : Math.round(amount/60)}
+                    //flipped상태라면 시입력값 그대로 / flipped상태가 아니라면 분에서 시로 변환 
+                    id="hours" 
+                    placeholder="Hours" 
+                    type="number"
+                    disabled={!inverted}
+                    onChange={onChange}
+                />
+            </div>
+            <button onClick={reset}>Reset</button>
+            <button onClick={onInvert}>{inverted ? "Turn back" : "Invert"}</button>
+        </div>
+        );
+    }
+    function KmToMiles() {
+        return <h3>KM 2 M</h3>
+    }
+    function App() {
+        const [index, setIndex] = React.useState("x")
+        const onSelect = (event) => {
+            setIndex(event.target.value);
+        };
+        return (
+            <div>
+                <h1>Super Converter</h1>
+                <select value={index} onChange={onSelect}>
+                    <option value="x">Select Your units</option>
+                    <option value="0">Mitues & Hours</option>
+                    <option value="1">Km & Miles</option>
+                </select>
+                <hr />
+                { index === "0" ? <MinutesToHours /> : null }
+                { index === "1" ? <KmToMiles /> : null}
+            </div>
+        );
+    }
+    const root = document.getElementById("root");
+    ReactDOM.render(<App />, root);
+</script>
+</html>
